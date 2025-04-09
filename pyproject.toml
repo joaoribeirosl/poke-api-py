@@ -7,7 +7,23 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "3.9.*"
-fastapi = {extras = ["standard"], version = "^0.115.12"}
+fastapi = { extras = ["standard"], version = "^0.115.12" }
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.11.4"
+
+[tool.ruff]
+line-length = 79
+extend-exclude = ['migrations']
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT']
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
 
 
 [build-system]
