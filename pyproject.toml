@@ -16,6 +16,15 @@ pytest = "^8.3.5"
 pytest-cov = "^6.1.1"
 taskipy = "^1.14.1"
 
+[tool.taskipy.tasks]
+lint = 'ruff check'
+pre_format = 'ruff check --fix'
+format = 'ruff format'
+run = 'fastapi dev poke_app/app.py'
+pre_test = 'task lint'
+test = 'pytest -s -x --cov=poke_app -vv'
+post_test = 'coverage html'
+
 [tool.ruff]
 line-length = 79
 extend-exclude = ['migrations']
@@ -31,15 +40,6 @@ quote-style = 'single'
 [tool.pytest.ini_options]
 pythonpath = "."
 addopts = '-p no:warnings'
-
-[tool.taskipy.tasks]
-lint = 'ruff check'
-pre_format = 'ruff check --fix'
-format = 'ruff format'
-run = 'fastapi dev poke_app/app.py'
-pre_test = 'task lint'
-test = 'pytest -s -x --cov=poke_app -vv'
-post_test = 'coverage html'
 
 
 [build-system]
