@@ -1,0 +1,15 @@
+[project]
+name = "poke-api"
+version = "0.1.0"
+description = ""
+authors = [{ name = "joaoribeirosl", email = "joaoribeirosl@gmail.com" }]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.9.*"
+fastapi = {extras = ["standard"], version = "^0.115.12"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
