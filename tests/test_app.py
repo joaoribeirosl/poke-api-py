@@ -43,24 +43,29 @@ def test_get_users_not_empty(client, user):
     assert response.json() == {'users': [user_schema]}
 
 
-def test_update_user(client, user):
+def test_update_user(client, user, token):
+    print(user.password)
     response = client.put(
-        '/users/1',
+        f'/users/{user.id}',
+        headers={'Authorization': f'Bearer {token}'},
         json={
-            'username': 'jojotest',
-            'email': 'jooj@test.com',
-            'password': 'sem A',
+            'password': 'test123',
+            'username': 'joo',
+            'email': 'joo@coomoq.escrev',
         },
     )
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {
-        'username': 'jojotest',
-        'email': 'jooj@test.com',
-        'id': 1,
+        'username': 'joo',
+        'email': 'joo@coomoq.escrev',
+        'id': user.id,
     }
 
 
-def test_delete_user(client, user):
-    response = client.delete('/users/1')
+def test_delete_user(client, user, token):
+    response = client.delete(
+        f'/users/{user.id}',
+        headers={'Authorization': f'Bearer {token}'},
+    )
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {'message': 'User deleted'}
