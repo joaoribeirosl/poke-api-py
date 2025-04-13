@@ -44,20 +44,20 @@ def test_get_users_not_empty(client, user):
 
 
 def test_update_user(client, user, token):
-    print(user.password)
     response = client.put(
         f'/users/{user.id}',
         headers={'Authorization': f'Bearer {token}'},
         json={
-            'password': 'test123',
-            'username': 'joo',
-            'email': 'joo@coomoq.escrev',
+            'password': 'newPass',
+            'username': 'joooj',
+            'email': 'joo@coomoq.com',
+            'id': user.id
         },
     )
     assert response.status_code == HTTPStatus.OK
     assert response.json() == {
-        'username': 'joo',
-        'email': 'joo@coomoq.escrev',
+        'username': 'joooj',
+        'email': 'joo@coomoq.com',
         'id': user.id,
     }
 
