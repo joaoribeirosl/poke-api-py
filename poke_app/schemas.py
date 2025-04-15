@@ -25,3 +25,20 @@ class UserList(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+
+class PokemonSchema(BaseModel):
+    name: str
+    type: str
+    level: int = 1
+    image_url: str | None = None
+
+
+class PokemonResponse(BaseModel):
+    id: int
+    name: str
+    type: str
+    level: int
+    image_url: str | None = None
+    trainer_id: int
+    model_config = ConfigDict(from_attributes=True)

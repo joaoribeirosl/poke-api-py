@@ -40,7 +40,6 @@ def test_update_user(client, user, token):
             'password': 'newPass',
             'username': 'joooj',
             'email': 'joo@coomoq.com',
-            'id': user.id,
         },
     )
     assert response.status_code == HTTPStatus.OK
