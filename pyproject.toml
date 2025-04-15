@@ -18,6 +18,7 @@ pwdlib = { extras = ["argon2"], version = "^0.2.1" }
 pyjwt = "^2.10.1"
 python-multipart = "^0.0.20"
 tzdata = "^2025.2"
+pytest-asyncio = "^0.26.0"
 
 
 [tool.poetry.group.dev.dependencies]
