@@ -1,3 +1,4 @@
+import factory
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
@@ -8,6 +9,15 @@ from poke_app.app import app
 from poke_app.auth import get_password_hash
 from poke_app.database import get_session
 from poke_app.models import User, table_registry
+
+
+class UserFactory(factory.Factory):
+    class Meta:
+        model = User
+
+    username = factory.Sequence(lambda x: f'test{x}')
+    email = factory.LazyAttribute(lambda obj: f'{obj.username}@test.com')
+    password = factory.LazyAttribute(lambda obj: f'{obj.username}!1')
 
 
 @pytest.fixture
@@ -39,9 +49,7 @@ def session():
 @pytest.fixture
 def user(session):
     pwd = 'test123'
-    user = User(
-        username='joo',
-        email='joo@coomoq.escrev',
+    user = UserFactory(
         password=get_password_hash(pwd),
     )
     session.add(user)
@@ -49,6 +57,16 @@ def user(session):
     session.refresh(user)
 
     user.clean_password = pwd
+
+    return user
+
+
+@pytest.fixture
+def other_user(session):
+    user = UserFactory()
+    session.add(user)
+    session.commit()
+    session.refresh(user)
 
     return user
 
