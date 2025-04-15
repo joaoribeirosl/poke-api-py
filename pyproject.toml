@@ -1,0 +1,55 @@
+[project]
+name = "poke-api"
+version = "0.1.0"
+description = ""
+authors = [{ name = "joaoribeirosl", email = "joaoribeiroslira@gmail.com" }]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.12.*"
+fastapi = { extras = ["standard"], version = "^0.115.12" }
+sqlalchemy = "^2.0.40"
+pydantic-settings = "^2.8.1"
+alembic = "^1.15.2"
+pwdlib = { extras = ["argon2"], version = "^0.2.1" }
+pyjwt = "^2.10.1"
+python-multipart = "^0.0.20"
+tzdata = "^2025.2"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.11.4"
+pytest = "^8.3.5"
+pytest-cov = "^6.1.1"
+taskipy = "^1.14.1"
+
+[tool.taskipy.tasks]
+lint = 'ruff check'
+pre_format = 'ruff check --fix'
+format = 'ruff format'
+run = 'fastapi dev poke_app/app.py'
+pre_test = 'task lint'
+test = 'pytest -s -x --cov=poke_app -vv'
+post_test = 'coverage html'
+
+[tool.ruff]
+line-length = 79
+extend-exclude = ['migrations']
+
+[tool.ruff.lint]
+preview = true
+select = ['I', 'F', 'E', 'W', 'PL', 'PT', 'FAST']
+
+
+[tool.ruff.format]
+preview = true
+quote-style = 'single'
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = '-p no:warnings'
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
