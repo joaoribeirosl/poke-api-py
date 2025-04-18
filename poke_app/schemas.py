@@ -5,6 +5,11 @@ class Message(BaseModel):
     message: str
 
 
+class FilterPage(BaseModel):
+    offset: int = 0
+    limit: int = 20
+
+
 class UserSchema(BaseModel):
     username: str
     email: EmailStr

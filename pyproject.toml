@@ -11,7 +11,7 @@ package-mode = false
 [tool.poetry.dependencies]
 python = "3.12.*"
 fastapi = { extras = ["standard"], version = "^0.115.12" }
-sqlalchemy = "^2.0.40"
+sqlalchemy = { extras = ["asyncio"], version = "^2.0.40" }
 pydantic-settings = "^2.8.1"
 alembic = "^1.15.2"
 pwdlib = { extras = ["argon2"], version = "^0.2.1" }
@@ -19,6 +19,7 @@ pyjwt = "^2.10.1"
 python-multipart = "^0.0.20"
 tzdata = "^2025.2"
 pytest-asyncio = "^0.26.0"
+aiosqlite = "^0.21.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -28,6 +29,7 @@ pytest-cov = "^6.1.1"
 taskipy = "^1.14.1"
 factory-boy = "^3.3.3"
 freezegun = "^1.5.1"
+pytest-asyncio = "^0.26.0"
 
 [tool.taskipy.tasks]
 lint = 'ruff check'
@@ -54,7 +56,10 @@ quote-style = 'single'
 [tool.pytest.ini_options]
 pythonpath = "."
 addopts = '-p no:warnings'
+asyncio_default_fixture_loop_scope = "function"
 
+[tool.coverage.run]
+concurrency = ["thread", "greenlet"]
 
 [build-system]
 requires = ["poetry-core"]

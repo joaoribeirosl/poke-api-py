@@ -37,3 +37,9 @@ class Pokemon:
     image_url: Mapped[str] = mapped_column(nullable=True)
     trainer_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
     level: Mapped[int] = mapped_column(default=1)
+    created_at: Mapped[datetime] = mapped_column(
+        init=False, server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        init=False, server_default=func.now(), onupdate=func.now()
+    )

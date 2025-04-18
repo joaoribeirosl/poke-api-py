@@ -3,9 +3,10 @@ from datetime import datetime
 
 import factory
 import pytest
+import pytest_asyncio
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine, event
-from sqlalchemy.orm import Session
+from sqlalchemy import event
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.pool import StaticPool
 
 from poke_app.app import app
@@ -14,13 +15,33 @@ from poke_app.database import get_session
 from poke_app.models import User, table_registry
 
 
-class UserFactory(factory.Factory):
-    class Meta:
-        model = User
+@pytest.fixture
+def client(session):
+    def get_session_override():
+        return session
 
-    username = factory.Sequence(lambda x: f'test{x}')
-    email = factory.LazyAttribute(lambda obj: f'{obj.username}@test.com')
-    password = factory.LazyAttribute(lambda obj: f'{obj.username}!1')
+    with TestClient(app) as client:
+        app.dependency_overrides[get_session] = get_session_override
+        yield client
+
+    app.dependency_overrides.clear()
+
+
+@pytest_asyncio.fixture
+async def session():
+    engine = create_async_engine(
+        'sqlite+aiosqlite:///:memory:',
+        connect_args={'check_same_thread': False},
+        poolclass=StaticPool,
+    )
+    async with engine.begin() as conn:
+        await conn.run_sync(table_registry.metadata.create_all)
+
+    async with AsyncSession(engine, expire_on_commit=False) as session:
+        yield session
+
+    async with engine.begin() as conn:
+        await conn.run_sync(table_registry.metadata.drop_all)
 
 
 @contextmanager
@@ -43,53 +64,30 @@ def mock_db_time():
     return _mock_db_time
 
 
-@pytest.fixture
-def client(session):
-    def get_session_override():
-        return session
+@pytest_asyncio.fixture
+async def user(session):
+    password = 'test'
+    user = UserFactory(password=get_password_hash(password))
 
-    with TestClient(app) as client:
-        app.dependency_overrides[get_session] = get_session_override
-        yield client
-
-    app.dependency_overrides.clear()
-
-
-@pytest.fixture
-def session():
-    engine = create_engine(
-        'sqlite:///:memory:',
-        connect_args={'check_same_thread': False},
-        poolclass=StaticPool,
-    )
-    table_registry.metadata.create_all(engine)
-    with Session(engine) as session:
-        yield session
-
-    table_registry.metadata.drop_all(engine)
-
-
-@pytest.fixture
-def user(session):
-    pwd = 'test123'
-    user = UserFactory(
-        password=get_password_hash(pwd),
-    )
     session.add(user)
-    session.commit()
-    session.refresh(user)
+    await session.commit()
+    await session.refresh(user)
 
-    user.clean_password = pwd
+    user.clean_password = password
 
     return user
 
 
-@pytest.fixture
-def other_user(session):
-    user = UserFactory()
+@pytest_asyncio.fixture
+async def other_user(session):
+    password = 'test'
+    user = UserFactory(password=get_password_hash(password))
+
     session.add(user)
-    session.commit()
-    session.refresh(user)
+    await session.commit()
+    await session.refresh(user)
+
+    user.clean_password = password
 
     return user
 
@@ -101,3 +99,12 @@ def token(client, user):
         data={'username': user.username, 'password': user.clean_password},
     )
     return response.json().get('access_token')
+
+
+class UserFactory(factory.Factory):
+    class Meta:
+        model = User
+
+    username = factory.Sequence(lambda x: f'test{x}')
+    email = factory.LazyAttribute(lambda obj: f'{obj.username}@test.com')
+    password = factory.LazyAttribute(lambda obj: f'{obj.username}!1')
