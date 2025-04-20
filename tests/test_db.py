@@ -3,7 +3,7 @@ from dataclasses import asdict
 import pytest
 from sqlalchemy import select
 
-from poke_app.models import User
+from poke_app.models import Pokemon, User
 
 
 @pytest.mark.asyncio
@@ -28,25 +28,45 @@ async def test_create_user(session, mock_db_time):
     }
 
 
-# @pytest.mark.asyncio
-# async def test_create_pokemon(session, user):
-#     pokemon = Pokemon(
-#         name='ditto',
-#         type='normal',
-#         image_url='test://url',
-#         trainer_id=user.id,
-#         level=50
-#     )
+@pytest.mark.asyncio
+async def test_create_pokemon(session, user: User):
+    pokemon = Pokemon(
+        name='ditto',
+        type='normal',
+        level=52,
+        image_url='test url',
+        trainer_id=user.id,
+    )
 
-#     session.add(pokemon)
-#     await session.commit()
+    session.add(pokemon)
+    await session.commit()
 
-#     pokemon = await session.scalar(select(Pokemon))
+    pokemon = await session.scalar(select(Pokemon))
 
-#     assert asdict(pokemon) == {
-#         'name': 'ditto',
-#         'type': 'normal',
-#         'image_url': 'test://url',
-#         'trainer_id': user.id,
-#         'level': 50,
-#     }
+    assert asdict(pokemon) == {
+        'name': 'ditto',
+        'id': 1,
+        'type': 'normal',
+        'level': 52,
+        'image_url': 'test url',
+        'trainer_id': 1,
+    }
+
+
+@pytest.mark.asyncio
+async def test_user_pokemon_relationship(session, user: User):
+    pokemon = Pokemon(
+        name='ditto',
+        type='normal',
+        level=52,
+        image_url='test url',
+        trainer_id=user.id,
+    )
+
+    session.add(pokemon)
+    await session.commit()
+    await session.refresh(user)
+
+    user = await session.scalar(select(User).where(User.id == user.id))
+
+    assert user.pokemon == [pokemon]
