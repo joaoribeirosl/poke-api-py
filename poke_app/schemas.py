@@ -1,4 +1,3 @@
-from datetime import datetime
 from pydantic import BaseModel, ConfigDict, EmailStr, field_validator
 
 from poke_app.utils import validate_type

@@ -20,6 +20,8 @@ python-multipart = "^0.0.20"
 tzdata = "^2025.2"
 pytest-asyncio = "^0.26.0"
 aiosqlite = "^0.21.0"
+psycopg = {extras = ["binary"], version = "^3.2.6"}
+asyncpg = "^0.30.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -30,6 +32,7 @@ taskipy = "^1.14.1"
 factory-boy = "^3.3.3"
 freezegun = "^1.5.1"
 pytest-asyncio = "^0.26.0"
+testcontainers = "^4.10.0"
 
 [tool.taskipy.tasks]
 lint = 'ruff check'
