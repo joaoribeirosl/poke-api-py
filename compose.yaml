@@ -20,16 +20,16 @@ services:
 
   poke_app:
     image: poke_app
+    entrypoint: ./entrypoint.sh
     env_file:
       - .env
-    entrypoint: ./entrypoint.sh
     build: .
     ports:
       - "8000:8000"
     depends_on:
       - pokeapp_database
     environment:
-      DATABASE_URL: postgresql+psycopg://app_user:app_password@pokeapp_database=:5432/app_db
+      DATABASE_URL: postgresql+psycopg://app_user:app_password@pokeapp_database:5432/app_db
 
 volumes:
   pgdata:
