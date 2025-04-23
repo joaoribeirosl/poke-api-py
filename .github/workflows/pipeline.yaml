@@ -12,3 +12,9 @@ jobs:
           python-version: '3.12'
       - name: Install poetry
         run: pipx install poetry
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Execute tests
+        run: poetry run task test
