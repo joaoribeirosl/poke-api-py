@@ -40,7 +40,6 @@ def test_update_user(client, user, token):
             'password': 'newPass',
             'username': 'joooj',
             'email': 'joo@coomoq.com',
-            'id': user.id,
         },
     )
     assert response.status_code == HTTPStatus.OK
@@ -51,6 +50,20 @@ def test_update_user(client, user, token):
     }
 
 
+def test_update_wrong_user(client, other_user, token):
+    response = client.put(
+        f'/users/{other_user.id}',
+        headers={'Authorization': f'Bearer {token}'},
+        json={
+            'password': 'newPass',
+            'username': 'joooj',
+            'email': 'joo@coomoq.com',
+        },
+    )
+    assert response.status_code == HTTPStatus.FORBIDDEN
+    assert response.json() == {'detail': 'Not enough permissions'}
+
+
 def test_delete_user(client, user, token):
     response = client.delete(
         f'/users/{user.id}',
@@ -59,9 +72,9 @@ def test_delete_user(client, user, token):
     assert response.json() == {'message': 'User deleted'}
 
 
-def test_delete_wrong_user(client, user, token):
+def test_delete_wrong_user(client, other_user, token):
     response = client.delete(
-        f'/users/{user.id + 1}',
+        f'/users/{other_user.id}',
         headers={'Authorization': f'Bearer {token}'},
     )
     assert response.status_code == HTTPStatus.FORBIDDEN
