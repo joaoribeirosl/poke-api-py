@@ -124,5 +124,5 @@ Pull requests are welcome and if you have suggestions or improvements, feel free
 ## ✉️ Contact
 Made with ❤️ by a Pokemon enthusiast! 
 
-Find me in: [Gmail](joaoribeiroslira@gmail.com) and [LinkedIn](www.linkedin.com/in/joaoribeirosl) 
+Find me on: [Gmail](mailto:joaoribeiroslira@gmail.com) and [LinkedIn](https://www.linkedin.com/in/joaoribeirosl)
 
