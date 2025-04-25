@@ -1,4 +1,6 @@
 # ⚡ Poke-API
+![Generic badge](https://img.shields.io/badge/maintainer-joaoribeirosl-purple.svg)
+![Generic badge](https://img.shields.io/badge/version-1.0.0-green.svg)
 
 A RESTful API built with FastAPI simulating a Pokemon world!
 
