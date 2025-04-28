@@ -4,9 +4,6 @@
 
 A RESTful API built with FastAPI simulating a Pokemon world!
 
-Live App: [https://poke-api-py.fly.dev](https://poke-api-py.fly.dev)  
-Docs: [https://poke-api-py.fly.dev/docs](https://poke-api-py.fly.dev/docs)
-
 ---
 
 ## 🚀 Tech Stack
@@ -19,7 +16,6 @@ Docs: [https://poke-api-py.fly.dev/docs](https://poke-api-py.fly.dev/docs)
 - 🧪 Pytest: Test suite
 - 🏭 Factory boy: Fixtures replacement tool
 - 🐳 Docker: Containerization 
-- 📦 Fly.io: Deploy
 - 📄 Alembic: Database migrations
 - ✨ SQLAlchemy 2.0: ORM for database interaction
 
@@ -103,7 +99,6 @@ Once the app is running locally or via Docker, you can access the interactive do
 | Environment | Swagger UI                         | ReDoc                              |
 |-------------|-------------------------------------|------------------------------------|
 | Local       | [localhost:8000/docs](http://localhost:8000/docs) | [localhost:8000/redoc](http://localhost:8000/redoc) |
-| Production (Fly.io) | [https://poke-api-py.fly.dev/docs](https://poke-api-py.fly.dev/docs) | [https://poke-api-py.fly.dev/redoc](https://poke-api-py.fly.dev/redoc) |
 
 
 
@@ -115,7 +110,7 @@ Once the app is running locally or via Docker, you can access the interactive do
 - [ ] Random Capture
 - [ ] Training System
 - [ ] Battle System
-- [ ] Trading System
+- [x] Trading System
 - [ ] Global Ranking
 - [x] Swagger Documentation
 

@@ -64,3 +64,8 @@ class FilterPokemon(FilterPage):
 class PokemonUpdate(BaseModel):
     name: str | None = None
     type: str | None = None
+
+
+class TradeRequest(BaseModel):
+    offered_pokemon_id: int
+    requested_pokemon_id: int

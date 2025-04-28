@@ -1,11 +1,9 @@
-import random
 from http import HTTPStatus
 
-import factory.fuzzy
 import pytest
 
-from poke_app.models import Pokemon
-from poke_app.utils import TEST_POKEMON_NAMES, VALID_TYPES
+from poke_app.factories import PokemonFactory
+from poke_app.schemas import PokemonResponse
 
 
 def test_create_pokemon(client, token):
@@ -28,6 +26,18 @@ def test_create_pokemon(client, token):
         'image_url': 'test',
         'trainer_id': 1,
     }
+
+
+def test_get_all_pokemon(client):
+    response = client.get('/pokemon/all')
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {'pokemon': []}
+
+
+def test_get_pokemon_not_empty(client, pokemon):
+    pokemon_schema = PokemonResponse.model_validate(pokemon).model_dump()
+    response = client.get('/pokemon/all')
+    assert response.json() == {'pokemon': [pokemon_schema]}
 
 
 @pytest.mark.asyncio
@@ -188,15 +198,30 @@ def test_delete_pokemon_error(client, token):
     assert response.json() == {'detail': 'Pokemon not found.'}
 
 
-class PokemonFactory(factory.Factory):
-    class Meta:
-        model = Pokemon
+@pytest.mark.asyncio
+async def test_trade_pokemon_success(session, client, user, other_user, token):
+    pokemon_user = PokemonFactory(trainer_id=user.id)
+    pokemon_other_user = PokemonFactory(trainer_id=other_user.id)
 
-    name = factory.fuzzy.FuzzyChoice(TEST_POKEMON_NAMES)
-    type = factory.fuzzy.FuzzyChoice(VALID_TYPES)
-    level = factory.LazyAttribute(lambda _: random.randrange(1, 100))
-    image_url = factory.LazyAttribute(
-        lambda obj: f'https://img.pokemondb.net/sprites/x-y/normal/{obj.name.lower()}.png'
+    session.add_all([pokemon_user, pokemon_other_user])
+    await session.commit()
+
+    payload = {
+        'offered_pokemon_id': pokemon_user.id,
+        'requested_pokemon_id': pokemon_other_user.id,
+    }
+
+    response = client.post(
+        '/pokemon/trade',
+        headers={'Authorization': f'Bearer {token}'},
+        json=payload,
     )
 
-    trainer_id = 1
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {'message': 'Trade completed successfully'}
+
+    await session.refresh(pokemon_user)
+    await session.refresh(pokemon_other_user)
+
+    assert pokemon_user.trainer_id == other_user.id
+    assert pokemon_other_user.trainer_id == user.id
