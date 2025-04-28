@@ -3,6 +3,7 @@ from http import HTTPStatus
 import pytest
 
 from poke_app.factories import PokemonFactory
+from poke_app.schemas import PokemonResponse
 
 
 def test_create_pokemon(client, token):
@@ -25,6 +26,18 @@ def test_create_pokemon(client, token):
         'image_url': 'test',
         'trainer_id': 1,
     }
+
+
+def test_get_all_pokemon(client):
+    response = client.get('/pokemon/all')
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {'pokemon': []}
+
+
+def test_get_pokemon_not_empty(client, pokemon):
+    pokemon_schema = PokemonResponse.model_validate(pokemon).model_dump()
+    response = client.get('/pokemon/all')
+    assert response.json() == {'pokemon': [pokemon_schema]}
 
 
 @pytest.mark.asyncio

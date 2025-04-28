@@ -44,6 +44,19 @@ async def create_pokemon(
     return db_pokemon
 
 
+@router.get('/all', response_model=PokemonList)
+async def get_all_pokemon(session: Session, pokemon_filter: Filter):
+    query = await session.scalars(
+        select(Pokemon)
+        .offset(pokemon_filter.offset)
+        .limit(pokemon_filter.limit)
+    )
+
+    pokemon = query.all()
+
+    return {'pokemon': pokemon}
+
+
 @router.get('/', response_model=PokemonList)
 async def get_all_pokemon_by_trainer_id(
     session: Session, current_user: CurrentUser, pokemon_filter: Filter

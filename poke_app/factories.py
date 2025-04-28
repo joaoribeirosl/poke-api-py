@@ -26,5 +26,3 @@ class PokemonFactory(factory.Factory):
     image_url = factory.LazyAttribute(
         lambda obj: f'https://img.pokemondb.net/sprites/x-y/normal/{obj.name.lower()}.png'
     )
-
-    trainer_id = 1
