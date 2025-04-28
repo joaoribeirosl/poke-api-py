@@ -15,6 +15,7 @@ from poke_app.schemas import (
     PokemonResponse,
     PokemonSchema,
     PokemonUpdate,
+    TradeRequest,
 )
 
 Session = Annotated[AsyncSession, Depends(get_session)]
@@ -103,3 +104,50 @@ async def delete_pokemon(
     await session.delete(pokemon)
     await session.commit()
     return {'message': 'Pokemon has been deleted successfully.'}
+
+
+@router.post('/trade', response_model=Message)
+async def trade_pokemon(
+    trade: TradeRequest,
+    session: Session,
+    current_user: CurrentUser,
+):
+    offered_pokemon = await session.scalar(
+        select(Pokemon).where(Pokemon.id == trade.offered_pokemon_id)
+    )
+
+    if not offered_pokemon:
+        raise HTTPException(
+            status_code=HTTPStatus.NOT_FOUND,
+            detail='Offered Pokemon not found',
+        )
+
+    if offered_pokemon.trainer_id != current_user.id:
+        raise HTTPException(
+            status_code=HTTPStatus.FORBIDDEN,
+            detail="You don't own the offered Pokémon",
+        )
+
+    requested_pokemon = await session.scalar(
+        select(Pokemon).where(Pokemon.id == trade.requested_pokemon_id)
+    )
+
+    if not requested_pokemon:
+        raise HTTPException(
+            status_code=HTTPStatus.NOT_FOUND,
+            detail='Requested Pokémon not found',
+        )
+
+    if requested_pokemon.trainer_id == current_user.id:
+        raise HTTPException(
+            status_code=HTTPStatus.BAD_REQUEST,
+            detail='You already own the requested Pokémon',
+        )
+
+    offered_pokemon.trainer_id, requested_pokemon.trainer_id = (
+        requested_pokemon.trainer_id,
+        offered_pokemon.trainer_id,
+    )
+    await session.commit()
+
+    return {'message': 'Trade completed successfully'}

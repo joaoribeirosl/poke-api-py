@@ -113,7 +113,7 @@ Once the app is running locally or via Docker, you can access the interactive do
 - [ ] Random Capture
 - [ ] Training System
 - [ ] Battle System
-- [ ] Trading System
+- [x] Trading System
 - [ ] Global Ranking
 - [x] Swagger Documentation
 

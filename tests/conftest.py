@@ -1,7 +1,6 @@
 from contextlib import contextmanager
 from datetime import datetime
 
-import factory
 import pytest
 import pytest_asyncio
 from fastapi.testclient import TestClient
@@ -12,7 +11,8 @@ from testcontainers.postgres import PostgresContainer
 from poke_app.app import app
 from poke_app.auth import get_password_hash
 from poke_app.database import get_session
-from poke_app.models import User, table_registry
+from poke_app.factories import UserFactory
+from poke_app.models import table_registry
 
 
 @pytest.fixture
@@ -101,12 +101,3 @@ def token(client, user):
         data={'username': user.username, 'password': user.clean_password},
     )
     return response.json().get('access_token')
-
-
-class UserFactory(factory.Factory):
-    class Meta:
-        model = User
-
-    username = factory.Sequence(lambda x: f'test{x}')
-    email = factory.LazyAttribute(lambda obj: f'{obj.username}@test.com')
-    password = factory.LazyAttribute(lambda obj: f'{obj.username}!1')
