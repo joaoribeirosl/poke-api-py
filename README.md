@@ -1,4 +1,7 @@
 # ⚡ Poke-API
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a534c9e181224e0688857baeb2653120)](https://app.codacy.com/gh/joaoribeirosl/poke-api-py?utm_source=github.com&utm_medium=referral&utm_content=joaoribeirosl/poke-api-py&utm_campaign=Badge_Grade)
+
 ![Generic badge](https://img.shields.io/badge/maintainer-joaoribeirosl-purple.svg)
 ![Generic badge](https://img.shields.io/badge/version-1.0.0-green.svg)
 
