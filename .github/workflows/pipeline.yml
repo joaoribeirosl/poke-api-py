@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         run: pipx run poetry install
 
+      - name: Run Linter
+        run: pipx run poetry run task format
+
       - name: Execute tests
         run: pipx run poetry run task test
 
