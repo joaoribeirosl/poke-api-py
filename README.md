@@ -42,11 +42,11 @@ A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/) simulating a P
 
 ---
 
-### 🧬 Pokemons
+### 🧬 Pokemon
 | Method | Route               | Description                         |
 |--------|---------------------|-------------------------------------|
 | POST   | `/pokemon/`                | Add a new Pokemon to user    |
-| GET    | `/pokemon/`                | List user's Pokemons         |
+| GET    | `/pokemon/`                | List user's Pokemon          |
 | PATCH  | `/pokemon/{pokemon_id}`    | Patch a specific Pokemon     |
 | DELETE | `/pokemon/{pokemon_id}`    | Delete a specific Pokemon    |
 

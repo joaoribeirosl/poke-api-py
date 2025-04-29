@@ -42,8 +42,14 @@ class Trainer:
         back_populates='trainer', init=False, lazy='selectin'
     )
 
-    pokemons: Mapped[list['Pokemon']] = relationship(
+    pokemon: Mapped[list['Pokemon']] = relationship(
         init=False, cascade='all, delete-orphan', lazy='selectin'
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        init=False, server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        init=False, server_default=func.now(), onupdate=func.now()
     )
 
 
@@ -57,3 +63,9 @@ class Pokemon:
     image_url: Mapped[str] = mapped_column(nullable=True)
     trainer_id: Mapped[int] = mapped_column(ForeignKey('trainers.id'))
     level: Mapped[int] = mapped_column(default=1)
+    created_at: Mapped[datetime] = mapped_column(
+        init=False, server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        init=False, server_default=func.now(), onupdate=func.now()
+    )
