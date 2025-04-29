@@ -3,7 +3,7 @@ from dataclasses import asdict
 import pytest
 from sqlalchemy import select
 
-from poke_app.models import Pokemon, User
+from poke_app.models import Pokemon, Trainer, User
 
 
 @pytest.mark.asyncio
@@ -24,8 +24,23 @@ async def test_create_user(session, mock_db_time):
         'email': 'test@test',
         'created_at': time,
         'updated_at': time,
-        'pokemon': [],
+        'trainer': None,
     }
+
+
+@pytest.mark.asyncio
+async def test_create_trainer(session, user: User):
+    trainer = Trainer(
+        user_id=user.id,
+        pokemons=[]
+    )
+
+    session.add(trainer)
+    await session.commit()
+
+    trainer = await session.scalar(select(Trainer))
+
+    assert asdict(trainer) == {}
 
 
 @pytest.mark.asyncio
@@ -49,7 +64,6 @@ async def test_create_pokemon(session, user: User):
         'type': 'normal',
         'level': 52,
         'image_url': 'test url',
-        'trainer_id': 1,
     }
 
 

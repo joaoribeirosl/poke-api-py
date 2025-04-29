@@ -20,7 +20,7 @@ class User:
         uselist=False,
         init=False,
         cascade='all, delete-orphan',
-        lazy='selectin'
+        lazy='selectin',
     )
 
     created_at: Mapped[datetime] = mapped_column(
@@ -37,17 +37,13 @@ class Trainer:
 
     id: Mapped[int] = mapped_column(init=False, primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), unique=True)
-    
+
     user: Mapped[User] = relationship(
-        back_populates='trainer',
-        init=False,
-        lazy='selectin'
+        back_populates='trainer', init=False, lazy='selectin'
     )
 
     pokemons: Mapped[list['Pokemon']] = relationship(
-        init=False,
-        cascade='all, delete-orphan',
-        lazy='selectin'
+        init=False, cascade='all, delete-orphan', lazy='selectin'
     )
 
 
@@ -61,4 +57,3 @@ class Pokemon:
     image_url: Mapped[str] = mapped_column(nullable=True)
     trainer_id: Mapped[int] = mapped_column(ForeignKey('trainers.id'))
     level: Mapped[int] = mapped_column(default=1)
-
