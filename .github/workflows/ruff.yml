@@ -1,0 +1,11 @@
+name: Linter
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  ruff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/ruff-action@v3
+      - run: pipx run poetry run task format
