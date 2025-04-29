@@ -55,6 +55,9 @@ A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/) simulating a P
 
 ## 🧪 Running Locally
 
+> [!IMPORTANT]
+Create `.env` with `.env.example` fields!
+
 ```bash
 # Clone the project
 git clone https://github.com/joaoribeirosl/poke-api.git
@@ -65,14 +68,13 @@ poetry install
 # Activate the virtual environment
 poetry shell
 
-# Create .env with .env.example fields!
-
 # Run the app (you can run also with 'fastapi dev poke_app/app.py')
 task run 
 ```
 
 ## 🐳 Running with Docker 
-
+> [!WARNING]
+Remember to set end of line sequence to `LF` instead `CRLF` if using windows.
 ```bash
 # Run both the API and PostgreSQL using Docker Compose
 
