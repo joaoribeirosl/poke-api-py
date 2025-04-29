@@ -1,9 +1,8 @@
 # ⚡ Poke-API
 ![Generic badge](https://img.shields.io/badge/maintainer-joaoribeirosl-purple.svg)
+[![Test](https://github.com/joaoribeirosl/poke-api-py/actions/workflows/pipeline.yml/badge.svg)](https://github.com/joaoribeirosl/poke-api-py/actions/workflows/pipeline.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f7e98070888c40018976c58c13c2e0e9)](https://app.codacy.com/gh/joaoribeirosl/poke-api-py/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 ![Generic badge](https://img.shields.io/badge/version-0.6.0-green.svg)
-
-[![Ruff](https://github.com/joaoribeirosl/poke-api-py/actions/workflows/ruff.yml/badge.svg)](https://github.com/joaoribeirosl/poke-api-py/actions/workflows/ruff.yml)
 
 A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/) simulating a Pokemon world!
 
