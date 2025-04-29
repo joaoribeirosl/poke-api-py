@@ -14,16 +14,40 @@ class User:
     username: Mapped[str] = mapped_column(unique=True)
     email: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str]
-    pokemon: Mapped[list['Pokemon']] = relationship(
+
+    trainer: Mapped['Trainer'] = relationship(
+        back_populates='user',
+        uselist=False,
         init=False,
         cascade='all, delete-orphan',
-        lazy='selectin',
+        lazy='selectin'
     )
+
     created_at: Mapped[datetime] = mapped_column(
         init=False, server_default=func.now()
     )
     updated_at: Mapped[datetime] = mapped_column(
         init=False, server_default=func.now(), onupdate=func.now()
+    )
+
+
+@table_registry.mapped_as_dataclass
+class Trainer:
+    __tablename__ = 'trainers'
+
+    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), unique=True)
+    
+    user: Mapped[User] = relationship(
+        back_populates='trainer',
+        init=False,
+        lazy='selectin'
+    )
+
+    pokemons: Mapped[list['Pokemon']] = relationship(
+        init=False,
+        cascade='all, delete-orphan',
+        lazy='selectin'
     )
 
 
@@ -35,5 +59,6 @@ class Pokemon:
     name: Mapped[str]
     type: Mapped[str]
     image_url: Mapped[str] = mapped_column(nullable=True)
-    trainer_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    trainer_id: Mapped[int] = mapped_column(ForeignKey('trainers.id'))
     level: Mapped[int] = mapped_column(default=1)
+
