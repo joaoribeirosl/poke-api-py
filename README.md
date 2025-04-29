@@ -1,7 +1,7 @@
 # ⚡ Poke-API
 ![Generic badge](https://img.shields.io/badge/maintainer-joaoribeirosl-purple.svg)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f7e98070888c40018976c58c13c2e0e9)](https://app.codacy.com/gh/joaoribeirosl/poke-api-py/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-![Generic badge](https://img.shields.io/badge/version-1.0.0-green.svg)
+![Generic badge](https://img.shields.io/badge/version-0.6.0-green.svg)
 
 A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/) simulating a Pokemon world!
 
