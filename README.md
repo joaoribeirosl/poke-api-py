@@ -1,8 +1,9 @@
 # ⚡ Poke-API
 ![Generic badge](https://img.shields.io/badge/maintainer-joaoribeirosl-purple.svg)
-![Generic badge](https://img.shields.io/badge/version-1.0.0-green.svg)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f7e98070888c40018976c58c13c2e0e9)](https://app.codacy.com/gh/joaoribeirosl/poke-api-py/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+![Generic badge](https://img.shields.io/badge/version-0.6.0-green.svg)
 
-A RESTful API built with FastAPI simulating a Pokemon world!
+A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/) simulating a Pokemon world!
 
 ---
 
@@ -54,6 +55,9 @@ A RESTful API built with FastAPI simulating a Pokemon world!
 
 ## 🧪 Running Locally
 
+> [!IMPORTANT]
+Create `.env` with `.env.example` fields!
+
 ```bash
 # Clone the project
 git clone https://github.com/joaoribeirosl/poke-api.git
@@ -64,16 +68,17 @@ poetry install
 # Activate the virtual environment
 poetry shell
 
-# Create .env with .env.example fields!
-
 # Run the app (you can run also with 'fastapi dev poke_app/app.py')
 task run 
 ```
 
 ## 🐳 Running with Docker 
-
+> [!WARNING]
+Remember to set end of line sequence to `LF` instead `CRLF` if using windows.
 ```bash
 # Run both the API and PostgreSQL using Docker Compose
+
+# to build image or dependency updates
 docker compose up --build
 
 # After building

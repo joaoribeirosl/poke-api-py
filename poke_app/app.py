@@ -18,5 +18,5 @@ app.include_router(pokemon.router)
 
 
 @app.get('/', status_code=HTTPStatus.OK, response_model=Message)
-def pokemon():
+def pokemon_hello_world():
     return {'message': 'IPlayPokemonGoEveryDay'}
