@@ -8,4 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/ruff-action@v3
+
+      - name: Install poetry
+        run: pipx install poetry
+        
       - run: pipx run poetry run task format
