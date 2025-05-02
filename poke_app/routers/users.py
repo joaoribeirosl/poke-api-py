@@ -11,7 +11,7 @@ from poke_app.auth import (
     get_password_hash,
 )
 from poke_app.database import get_session
-from poke_app.models import User
+from poke_app.models import Trainer, User
 from poke_app.schemas import (
     FilterPage,
     Message,
@@ -55,6 +55,12 @@ async def create_user(session: Session, user: UserSchema):
     session.add(db_user)
     await session.commit()
     await session.refresh(db_user)
+
+    db_trainer = Trainer(user_id=db_user.id)
+
+    session.add(db_trainer)
+    await session.commit()
+    await session.refresh(db_trainer)
 
     return db_user
 
