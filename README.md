@@ -21,6 +21,7 @@ A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/) simulating a P
 - 🐳 Docker: Containerization 
 - 📄 Alembic: Database migrations
 - ✨ SQLAlchemy 2.0: ORM for database interaction
+- ⚙️ Codacy: Embeds security checks and rules into my workflow
 
 ---
 
@@ -46,10 +47,12 @@ A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/) simulating a P
 ### 🧬 Pokemon
 | Method | Route               | Description                         |
 |--------|---------------------|-------------------------------------|
-| POST   | `/pokemon/`                | Add a new Pokemon to user    |
-| GET    | `/pokemon/`                | List user's Pokemon          |
+| POST   | `/pokemon/`                | Add a new Pokemon to a trainer |
+| GET    | `/pokemon/`                | List trainer's Pokemon       |
+| GET    | `/pokemon/all`             | List all Pokemon in database |
 | PATCH  | `/pokemon/{pokemon_id}`    | Patch a specific Pokemon     |
 | DELETE | `/pokemon/{pokemon_id}`    | Delete a specific Pokemon    |
+| POST   | `/pokemon/trade`           | trade pokemon from one trainer to another |
 
 ---
 
@@ -111,7 +114,7 @@ alembic stamp <previous_revision_id> # e.g. 6790cb4674f7
 ```
 
 ```bash
-docker compose down -v # Clean volumes
+docker compose down -v # Clear volumes
 
 docker compose up -d
 
