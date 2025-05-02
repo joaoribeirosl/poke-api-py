@@ -32,7 +32,20 @@ jobs:
       - name: Run Linter
         run: pipx run poetry run task format
 
-      - name: Execute tests
-        run: pipx run poetry run task test
+
+      - name: Run tests and generate coverage
+        run: |
+          pipx run poetry run coverage run -m pytest
+          pipx run poetry run coverage xml
+
+      - name: Run codacy-coverage-reporter
+        env:
+          CODACY_CONFIGURED: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        if: ${{ env.CODACY_CONFIGURED != ''}}
+        uses: codacy/codacy-coverage-reporter-action@v1
+        continue-on-error: true
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: ./coverage.xml
 
       
