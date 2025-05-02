@@ -6,7 +6,7 @@ from poke_app.factories import PokemonFactory
 from poke_app.schemas import PokemonResponse
 
 
-def test_create_pokemon(client, token):
+def test_create_pokemon(client, token, trainer):
     response = client.post(
         '/pokemon/',
         headers={'Authorization': f'Bearer {token}'},
@@ -15,7 +15,7 @@ def test_create_pokemon(client, token):
             'type': 'normal',
             'level': 52,
             'image_url': 'test',
-            'trainer_id': 1,
+            'trainer_id': trainer.id,
         },
     )
     assert response.json() == {
@@ -24,7 +24,7 @@ def test_create_pokemon(client, token):
         'type': 'normal',
         'level': 52,
         'image_url': 'test',
-        'trainer_id': 1,
+        'trainer_id': trainer.id,
     }
 
 
@@ -42,11 +42,11 @@ def test_get_pokemon_not_empty(client, pokemon):
 
 @pytest.mark.asyncio
 async def test_pokemon_list_should_return_5_pokemon(
-    session, client, user, token
+    session, client, trainer, token
 ):
     expected_pokemon = 5
     session.add_all(
-        PokemonFactory.create_batch(expected_pokemon, trainer_id=user.id)
+        PokemonFactory.create_batch(expected_pokemon, trainer_id=trainer.id)
     )
     await session.commit()
 
@@ -60,10 +60,10 @@ async def test_pokemon_list_should_return_5_pokemon(
 
 @pytest.mark.asyncio
 async def test_list_pokemon_pagination_should_return_2_pokemon(
-    session, user, client, token
+    session, trainer, client, token
 ):
     expected_pokemon = 2
-    session.add_all(PokemonFactory.create_batch(5, trainer_id=user.id))
+    session.add_all(PokemonFactory.create_batch(5, trainer_id=trainer.id))
     await session.commit()
 
     response = client.get(
@@ -76,12 +76,12 @@ async def test_list_pokemon_pagination_should_return_2_pokemon(
 
 @pytest.mark.asyncio
 async def test_pokemon_list_filter_name_should_return_5_pokemon(
-    session, user, client, token
+    session, trainer, client, token
 ):
     expected_pokemon = 5
     session.add_all(
         PokemonFactory.create_batch(
-            expected_pokemon, trainer_id=user.id, name='greninja'
+            expected_pokemon, trainer_id=trainer.id, name='greninja'
         )
     )
     await session.commit()
@@ -96,12 +96,12 @@ async def test_pokemon_list_filter_name_should_return_5_pokemon(
 
 @pytest.mark.asyncio
 async def test_pokemon_list_filter_type_should_return_5_pokemon(
-    session, user, client, token
+    session, trainer, client, token
 ):
     expected_pokemon = 5
     session.add_all(
         PokemonFactory.create_batch(
-            expected_pokemon, trainer_id=user.id, type='ghost'
+            expected_pokemon, trainer_id=trainer.id, type='ghost'
         )
     )
     await session.commit()
@@ -116,13 +116,13 @@ async def test_pokemon_list_filter_type_should_return_5_pokemon(
 
 @pytest.mark.asyncio
 async def test_pokemon_list_filter_combined_should_return_5_pokemon(
-    session, user, client, token
+    session, trainer, client, token
 ):
     expected_pokemon = 5
     session.add_all(
         PokemonFactory.create_batch(
             5,
-            trainer_id=user.id,
+            trainer_id=trainer.id,
             name='pikachu',
             type='electric',
         )
@@ -131,7 +131,7 @@ async def test_pokemon_list_filter_combined_should_return_5_pokemon(
     session.add_all(
         PokemonFactory.create_batch(
             3,
-            trainer_id=user.id,
+            trainer_id=trainer.id,
             name='mewtwo',
             type='psychic',
         )
@@ -157,8 +157,8 @@ def test_patch_pokemon_error(client, token):
 
 
 @pytest.mark.asyncio
-async def test_patch_pokemon(session, client, user, token):
-    pokemon = PokemonFactory(trainer_id=user.id)
+async def test_patch_pokemon(session, client, trainer, token):
+    pokemon = PokemonFactory(trainer_id=trainer.id)
 
     session.add(pokemon)
     await session.commit()
@@ -173,8 +173,8 @@ async def test_patch_pokemon(session, client, user, token):
 
 
 @pytest.mark.asyncio
-async def test_delete_pokemon(session, client, user, token):
-    pokemon = PokemonFactory(trainer_id=user.id)
+async def test_delete_pokemon(session, client, trainer, token):
+    pokemon = PokemonFactory(trainer_id=trainer.id)
 
     session.add(pokemon)
     await session.commit()
@@ -199,9 +199,11 @@ def test_delete_pokemon_error(client, token):
 
 
 @pytest.mark.asyncio
-async def test_trade_pokemon_success(session, client, user, other_user, token):
-    pokemon_user = PokemonFactory(trainer_id=user.id)
-    pokemon_other_user = PokemonFactory(trainer_id=other_user.id)
+async def test_trade_pokemon_success(
+    session, client, trainer, other_trainer, token
+):
+    pokemon_user = PokemonFactory(trainer_id=trainer.id)
+    pokemon_other_user = PokemonFactory(trainer_id=other_trainer.id)
 
     session.add_all([pokemon_user, pokemon_other_user])
     await session.commit()
@@ -223,5 +225,5 @@ async def test_trade_pokemon_success(session, client, user, other_user, token):
     await session.refresh(pokemon_user)
     await session.refresh(pokemon_other_user)
 
-    assert pokemon_user.trainer_id == other_user.id
-    assert pokemon_other_user.trainer_id == user.id
+    assert pokemon_user.trainer_id == other_trainer.id
+    assert pokemon_other_user.trainer_id == trainer.id
