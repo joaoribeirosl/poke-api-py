@@ -1,7 +1,8 @@
 # ⚡ Poke-API
 ![Generic badge](https://img.shields.io/badge/maintainer-joaoribeirosl-purple.svg)
+[![Test](https://github.com/joaoribeirosl/poke-api-py/actions/workflows/pipeline.yml/badge.svg)](https://github.com/joaoribeirosl/poke-api-py/actions/workflows/pipeline.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f7e98070888c40018976c58c13c2e0e9)](https://app.codacy.com/gh/joaoribeirosl/poke-api-py/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-![Generic badge](https://img.shields.io/badge/version-0.6.0-green.svg)
+![Generic badge](https://img.shields.io/badge/version-v0.6.0-green.svg)
 
 A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/) simulating a Pokemon world!
 
@@ -41,11 +42,11 @@ A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/) simulating a P
 
 ---
 
-### 🧬 Pokemons
+### 🧬 Pokemon
 | Method | Route               | Description                         |
 |--------|---------------------|-------------------------------------|
 | POST   | `/pokemon/`                | Add a new Pokemon to user    |
-| GET    | `/pokemon/`                | List user's Pokemons         |
+| GET    | `/pokemon/`                | List user's Pokemon          |
 | PATCH  | `/pokemon/{pokemon_id}`    | Patch a specific Pokemon     |
 | DELETE | `/pokemon/{pokemon_id}`    | Delete a specific Pokemon    |
 
@@ -78,7 +79,7 @@ Remember to set end of line sequence to `LF` instead `CRLF` if using windows.
 ```bash
 # Run both the API and PostgreSQL using Docker Compose
 
-# to build image or dependency updates
+# To build image or dependency updates
 docker compose up --build
 
 # After building
@@ -88,10 +89,42 @@ docker compose up -d
 docker compose down
 ```
 
+> [!NOTE]
+If you want to create a new migration follow these steps:
+
+```bash
+docker exec -it <container-app> bash
+
+alembic revision -m "migration-name"
+
+alembic upgrade head
+```
+
+> [!WARNING]
+In case you have something like this: `alembic.util.CommandError: Can't locate revision identified by '31b8ab83c7d'` you can follow these steps:
+
+```bash
+docker exec -it <container-app> bash
+
+alembic stamp <previous_revision_id> # e.g. 6790cb4674f7
+```
+
+```bash
+docker compose down -v # Clean volumes
+
+docker compose up -d
+
+docker exec -it <container-app> bash
+
+alembic revision -m "migration-name"
+```
+
+
 ## 🧪 Running Tests
 ```bash
 task test
 ```
+
 
 Tests are located in the tests/ directory and use pytest.
 Includes coverage for users, pokemon, and authentication flows.
