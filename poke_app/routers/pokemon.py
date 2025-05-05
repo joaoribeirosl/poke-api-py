@@ -1,7 +1,6 @@
-from http import HTTPStatus
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -10,12 +9,7 @@ from poke_app.database import get_session
 from poke_app.models import Pokemon, User
 from poke_app.schemas import (
     FilterPokemon,
-    Message,
     PokemonList,
-    PokemonResponse,
-    PokemonSchema,
-    PokemonUpdate,
-    TradeRequest,
 )
 
 Session = Annotated[AsyncSession, Depends(get_session)]
@@ -25,26 +19,7 @@ Filter = Annotated[FilterPokemon, Query()]
 router = APIRouter(prefix='/pokemon', tags=['pokemon'])
 
 
-@router.post(
-    '/', status_code=HTTPStatus.CREATED, response_model=PokemonResponse
-)
-async def create_pokemon(
-    session: Session, current_user: CurrentUser, pokemon: PokemonSchema
-):
-    db_pokemon = Pokemon(
-        name=pokemon.name,
-        type=pokemon.type,
-        level=pokemon.level,
-        image_url=pokemon.image_url,
-        trainer_id=current_user.id,
-    )
-    session.add(db_pokemon)
-    await session.commit()
-    await session.refresh(db_pokemon)
-    return db_pokemon
-
-
-@router.get('/all', response_model=PokemonList)
+@router.get('/', response_model=PokemonList)
 async def get_all_pokemon(session: Session, pokemon_filter: Filter):
     query = await session.scalars(
         select(Pokemon)
@@ -57,110 +32,110 @@ async def get_all_pokemon(session: Session, pokemon_filter: Filter):
     return {'pokemon': pokemon}
 
 
-@router.get('/', response_model=PokemonList)
-async def get_all_pokemon_by_trainer_id(
-    session: Session, current_user: CurrentUser, pokemon_filter: Filter
-):
-    query = select(Pokemon).where(Pokemon.trainer_id == current_user.id)
+# @router.get('/id', response_model=PokemonList)
+# async def get_all_pokemon_by_trainer_id(
+#     session: Session, current_user: CurrentUser, pokemon_filter: Filter
+# ):
+#     query = select(Pokemon).where(Pokemon.trainer_id == current_user.id)
 
-    if pokemon_filter.name:
-        query = query.filter(Pokemon.name.contains(pokemon_filter.name))
+#     if pokemon_filter.name:
+#         query = query.filter(Pokemon.name.contains(pokemon_filter.name))
 
-    if pokemon_filter.type:
-        query = query.filter(Pokemon.type.contains(pokemon_filter.type))
+#     if pokemon_filter.type:
+#         query = query.filter(Pokemon.type.contains(pokemon_filter.type))
 
-    pokemon = await session.scalars(
-        query.offset(pokemon_filter.offset).limit(pokemon_filter.limit)
-    )
+#     pokemon = await session.scalars(
+#         query.offset(pokemon_filter.offset).limit(pokemon_filter.limit)
+#     )
 
-    return {'pokemon': pokemon.all()}
-
-
-@router.patch('/{pokemon_id}', response_model=PokemonResponse)
-async def patch_pokemon(
-    pokemon_id: int,
-    session: Session,
-    user: CurrentUser,
-    pokemon: PokemonUpdate,
-):
-    db_pokemon = await session.scalar(
-        select(Pokemon).where(
-            Pokemon.trainer_id == user.id, Pokemon.id == pokemon_id
-        )
-    )
-
-    if not db_pokemon:
-        raise HTTPException(
-            status_code=HTTPStatus.NOT_FOUND, detail='Pokemon not found.'
-        )
-
-    for key, value in pokemon.model_dump(exclude_unset=True).items():
-        setattr(db_pokemon, key, value)
-
-    session.add(db_pokemon)
-    await session.commit()
-    await session.refresh(db_pokemon)
-
-    return db_pokemon
+#     return {'pokemon': pokemon.all()}
 
 
-@router.delete('/{pokemon_id}', response_model=Message)
-async def delete_pokemon(
-    pokemon_id: int, session: Session, current_user: CurrentUser
-):
-    pokemon = await session.get(Pokemon, pokemon_id)
-    if not pokemon or pokemon.trainer_id != current_user.id:
-        raise HTTPException(
-            status_code=HTTPStatus.NOT_FOUND, detail='Pokemon not found.'
-        )
+# @router.patch('/{pokemon_id}', response_model=PokemonResponse)
+# async def patch_pokemon(
+#     pokemon_id: int,
+#     session: Session,
+#     user: CurrentUser,
+#     pokemon: PokemonUpdate,
+# ):
+#     db_pokemon = await session.scalar(
+#         select(Pokemon).where(
+#             Pokemon.trainer_id == user.id, Pokemon.id == pokemon_id
+#         )
+#     )
 
-    await session.delete(pokemon)
-    await session.commit()
-    return {'message': 'Pokemon has been deleted successfully.'}
+#     if not db_pokemon:
+#         raise HTTPException(
+#             status_code=HTTPStatus.NOT_FOUND, detail='Pokemon not found.'
+#         )
+
+#     for key, value in pokemon.model_dump(exclude_unset=True).items():
+#         setattr(db_pokemon, key, value)
+
+#     session.add(db_pokemon)
+#     await session.commit()
+#     await session.refresh(db_pokemon)
+
+#     return db_pokemon
 
 
-@router.post('/trade', response_model=Message)
-async def trade_pokemon(
-    trade: TradeRequest,
-    session: Session,
-    current_user: CurrentUser,
-):
-    offered_pokemon = await session.scalar(
-        select(Pokemon).where(Pokemon.id == trade.offered_pokemon_id)
-    )
+# @router.delete('/{pokemon_id}', response_model=Message)
+# async def delete_pokemon(
+#     pokemon_id: int, session: Session, current_user: CurrentUser
+# ):
+#     pokemon = await session.get(Pokemon, pokemon_id)
+#     if not pokemon or pokemon.trainer_id != current_user.id:
+#         raise HTTPException(
+#             status_code=HTTPStatus.NOT_FOUND, detail='Pokemon not found.'
+#         )
 
-    if not offered_pokemon:
-        raise HTTPException(
-            status_code=HTTPStatus.NOT_FOUND,
-            detail='Offered Pokemon not found',
-        )
+#     await session.delete(pokemon)
+#     await session.commit()
+#     return {'message': 'Pokemon has been deleted successfully.'}
 
-    if offered_pokemon.trainer_id != current_user.id:
-        raise HTTPException(
-            status_code=HTTPStatus.FORBIDDEN,
-            detail="You don't own the offered Pokémon",
-        )
 
-    requested_pokemon = await session.scalar(
-        select(Pokemon).where(Pokemon.id == trade.requested_pokemon_id)
-    )
+# @router.post('/trade', response_model=Message)
+# async def trade_pokemon(
+#     trade: TradeRequest,
+#     session: Session,
+#     current_user: CurrentUser,
+# ):
+#     offered_pokemon = await session.scalar(
+#         select(Pokemon).where(Pokemon.id == trade.offered_pokemon_id)
+#     )
 
-    if not requested_pokemon:
-        raise HTTPException(
-            status_code=HTTPStatus.NOT_FOUND,
-            detail='Requested Pokémon not found',
-        )
+#     if not offered_pokemon:
+#         raise HTTPException(
+#             status_code=HTTPStatus.NOT_FOUND,
+#             detail='Offered Pokemon not found',
+#         )
 
-    if requested_pokemon.trainer_id == current_user.id:
-        raise HTTPException(
-            status_code=HTTPStatus.BAD_REQUEST,
-            detail='You already own the requested Pokémon',
-        )
+#     if offered_pokemon.trainer_id != current_user.id:
+#         raise HTTPException(
+#             status_code=HTTPStatus.FORBIDDEN,
+#             detail="You don't own the offered Pokémon",
+#         )
 
-    offered_pokemon.trainer_id, requested_pokemon.trainer_id = (
-        requested_pokemon.trainer_id,
-        offered_pokemon.trainer_id,
-    )
-    await session.commit()
+#     requested_pokemon = await session.scalar(
+#         select(Pokemon).where(Pokemon.id == trade.requested_pokemon_id)
+#     )
 
-    return {'message': 'Trade completed successfully'}
+#     if not requested_pokemon:
+#         raise HTTPException(
+#             status_code=HTTPStatus.NOT_FOUND,
+#             detail='Requested Pokémon not found',
+#         )
+
+#     if requested_pokemon.trainer_id == current_user.id:
+#         raise HTTPException(
+#             status_code=HTTPStatus.BAD_REQUEST,
+#             detail='You already own the requested Pokémon',
+#         )
+
+#     offered_pokemon.trainer_id, requested_pokemon.trainer_id = (
+#         requested_pokemon.trainer_id,
+#         offered_pokemon.trainer_id,
+#     )
+#     await session.commit()
+
+#     return {'message': 'Trade completed successfully'}

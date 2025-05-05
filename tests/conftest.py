@@ -11,8 +11,8 @@ from testcontainers.postgres import PostgresContainer
 from poke_app.app import app
 from poke_app.auth import get_password_hash
 from poke_app.database import get_session
-from poke_app.factories import PokemonFactory, UserFactory
-from poke_app.models import Trainer, table_registry
+from poke_app.factories import UserFactory
+from poke_app.models import table_registry
 
 
 @pytest.fixture
@@ -83,31 +83,31 @@ async def other_user(session):
     return user
 
 
-@pytest_asyncio.fixture
-async def trainer(session, user):
-    trainer = Trainer(user_id=user.id)
-    session.add(trainer)
-    await session.commit()
-    await session.refresh(trainer)
-    return trainer
+# @pytest_asyncio.fixture
+# async def trainer(session, user):
+#     trainer = Trainer(user_id=user.id)
+#     session.add(trainer)
+#     await session.commit()
+#     await session.refresh(trainer)
+#     return trainer
 
 
-@pytest_asyncio.fixture
-async def other_trainer(session, other_user):
-    trainer = Trainer(user_id=other_user.id)
-    session.add(trainer)
-    await session.commit()
-    await session.refresh(trainer)
-    return trainer
+# @pytest_asyncio.fixture
+# async def other_trainer(session, other_user):
+#     trainer = Trainer(user_id=other_user.id)
+#     session.add(trainer)
+#     await session.commit()
+#     await session.refresh(trainer)
+#     return trainer
 
 
-@pytest_asyncio.fixture
-async def pokemon(session, trainer):
-    pokemon = PokemonFactory(trainer_id=trainer.id)
-    session.add(pokemon)
-    await session.commit()
-    await session.refresh(pokemon)
-    return pokemon
+# @pytest_asyncio.fixture
+# async def pokemon(session, trainer):
+#     pokemon = PokemonFactory(trainer_id=trainer.id)
+#     session.add(pokemon)
+#     await session.commit()
+#     await session.refresh(pokemon)
+#     return pokemon
 
 
 @pytest.fixture

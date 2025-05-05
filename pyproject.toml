@@ -23,6 +23,8 @@ aiosqlite = "^0.21.0"
 psycopg = { extras = ["binary"], version = "^3.2.6" }
 asyncpg = "^0.30.0"
 coverage = { extras = ["greenlet"], version = "^7.8.0" }
+httpx = {extras = ["cli"], version = "^0.28.1"}
+requests = "^2.32.3"
 
 
 [tool.poetry.group.dev.dependencies]
