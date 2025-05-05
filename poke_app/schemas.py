@@ -36,8 +36,8 @@ class Token(BaseModel):
 
 class PokemonSchema(BaseModel):
     name: str
+    dex_no: int
     type: str
-    level: int = 1
     image_url: str | None = None
 
     @field_validator('type')
@@ -48,7 +48,6 @@ class PokemonSchema(BaseModel):
 
 class PokemonResponse(PokemonSchema):
     id: int
-    trainer_id: int
     model_config = ConfigDict(from_attributes=True)
 
 
