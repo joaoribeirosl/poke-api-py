@@ -2,8 +2,8 @@ from time import sleep
 
 import requests
 
-POKE_API_URL = 'https://pokeapi.co/api/v2/pokemon'
-POKEDEX = 151
+POKE_API_URL = 'https://pokeapi.co/api/v2/pokemon?limit=151&offset=0'
+POKE_API_TYPE_URL = 'https://pokeapi.co/api/v2/type'
 
 
 VALID_TYPES = {
@@ -53,9 +53,11 @@ def validate_type(poke_type: str) -> str:
     return poke_type
 
 
-def fetch_pokemon_data(poke_id):
+def fetch_pokemon_data(url: str):
     sleep(0.3)
-    url = f'{POKE_API_URL}/{poke_id}'
     response = requests.get(url)
     response.raise_for_status()
     return response.json()
+
+
+
