@@ -105,8 +105,10 @@ alembic upgrade head
 ```
 
 > [!WARNING]
-In case you have something like this: `alembic.util.CommandError: Can't locate revision identified by '31b8ab83c7d'` you can follow these steps:
+In case you delete a migration and have something like this: `alembic.util.CommandError: Can't locate revision identified by '31b8ab83c7d'` you can follow these steps:
 
+> [!WARNING]
+Remember to delete the migration in `__pycache__` too!
 ```bash
 docker exec -it <container-app> bash
 
