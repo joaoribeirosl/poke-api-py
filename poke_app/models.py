@@ -10,7 +10,9 @@ table_registry = registry()
 class User:
     __tablename__ = 'users'
 
-    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    id: Mapped[int] = mapped_column(
+        init=False, primary_key=True, autoincrement=True
+    )
     username: Mapped[str] = mapped_column(unique=True)
     email: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str]
@@ -49,7 +51,9 @@ class User:
 class Pokemon:
     __tablename__ = 'pokemon'
 
-    id: Mapped[int] = mapped_column(init=False, primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(
+        init=False, primary_key=True, autoincrement=True
+    )
     dex_no: Mapped[int]
     name: Mapped[str]
     type_id: Mapped[int] = mapped_column(ForeignKey('types.id'))
@@ -69,7 +73,9 @@ class Pokemon:
 class PokemonType:
     __tablename__ = 'types'
 
-    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    id: Mapped[int] = mapped_column(
+        init=False, primary_key=True, autoincrement=True
+    )
     name: Mapped[str]
 
     pokemon: Mapped[list['Pokemon']] = relationship(

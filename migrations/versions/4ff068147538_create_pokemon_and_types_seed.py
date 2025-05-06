@@ -36,7 +36,6 @@ def types_seeding():
 
 
 def pokemon_seeding():
-
     connection = op.get_bind()
     result = connection.execute(sa.select(PokemonType.id, PokemonType.name))
     type_mapping = {row.name: row.id for row in result}
@@ -65,5 +64,5 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.execute(sa.delete(PokemonType))
     op.execute(sa.delete(Pokemon))
+    op.execute(sa.delete(PokemonType))
