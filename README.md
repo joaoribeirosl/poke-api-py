@@ -5,7 +5,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f7e98070888c40018976c58c13c2e0e9)](https://app.codacy.com/gh/joaoribeirosl/poke-api-py/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 ![Generic badge](https://img.shields.io/badge/version-v0.6.0-green.svg)
 
-A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/) simulating a Pokemon world!
+A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/).
 
 ---
 
@@ -99,7 +99,7 @@ If you want to create a new migration follow these steps:
 ```bash
 docker exec -it <container-app> bash
 
-alembic revision -m "migration-name"
+alembic revision --autogenerate -m "name" # autogenerate is optional
 
 alembic upgrade head
 ```
@@ -133,7 +133,7 @@ task test
 
 
 Tests are located in the tests/ directory and use pytest.
-Includes coverage for users, pokemon, and authentication flows.
+Includes coverage for users, pokemon, authentication flows and more.
 
 ## 📬 API Documentation
 

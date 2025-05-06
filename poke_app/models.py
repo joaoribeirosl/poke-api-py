@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from sqlalchemy import func
-from sqlalchemy.orm import Mapped, mapped_column, registry
+from sqlalchemy import ForeignKey, func
+from sqlalchemy.orm import Mapped, mapped_column, registry, relationship
 
 table_registry = registry()
 
@@ -49,12 +49,13 @@ class User:
 class Pokemon:
     __tablename__ = 'pokemon'
 
-    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    id: Mapped[int] = mapped_column(init=False, primary_key=True, autoincrement=True)
     dex_no: Mapped[int]
     name: Mapped[str]
-    image_url: Mapped[str] = mapped_column(nullable=True)
-    type: Mapped[str]
-    # type: Mapped['Type'] = relationship(back_populates='pokemon', init=False)
+    type_id: Mapped[int] = mapped_column(ForeignKey('types.id'))
+    type: Mapped['PokemonType'] = relationship(
+        back_populates='pokemon', init=False
+    )
     image_url: Mapped[str] = mapped_column(nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         init=False, server_default=func.now()
@@ -64,21 +65,22 @@ class Pokemon:
     )
 
 
-# class Type:
-#     __tablename__ = 'types'
+@table_registry.mapped_as_dataclass
+class PokemonType:
+    __tablename__ = 'types'
 
-#     id: Mapped[int] = mapped_column(init=False, primary_key=True)
-#     name: Mapped[str]
+    id: Mapped[int] = mapped_column(init=False, primary_key=True)
+    name: Mapped[str]
 
-#     pokemon: Mapped[list['Pokemon']] = relationship(
-#         back_populates='type', init=False
-#     )
-#     created_at: Mapped[datetime] = mapped_column(
-#         init=False, server_default=func.now()
-#     )
-#     updated_at: Mapped[datetime] = mapped_column(
-#         init=False, server_default=func.now(), onupdate=func.now()
-#     )
+    pokemon: Mapped[list['Pokemon']] = relationship(
+        back_populates='type', init=False
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        init=False, server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        init=False, server_default=func.now(), onupdate=func.now()
+    )
 
 
 # class Weakness:
