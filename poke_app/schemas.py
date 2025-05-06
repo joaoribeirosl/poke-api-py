@@ -1,6 +1,4 @@
-from pydantic import BaseModel, ConfigDict, EmailStr, field_validator
-
-from poke_app.utils import validate_type
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 class Message(BaseModel):
@@ -35,15 +33,10 @@ class Token(BaseModel):
 
 
 class PokemonSchema(BaseModel):
-    name: str
     dex_no: int
-    type: str
+    name: str
+    type_id: int
     image_url: str | None = None
-
-    @field_validator('type')
-    @classmethod
-    def check_type(cls, type):
-        return validate_type(type)
 
 
 class PokemonResponse(PokemonSchema):
