@@ -25,28 +25,6 @@ class User:
     )
 
 
-# @table_registry.mapped_as_dataclass
-# class Trainer:
-#     __tablename__ = 'trainers'
-
-#     id: Mapped[int] = mapped_column(init=False, primary_key=True)
-#     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), unique=True)
-
-#     user: Mapped[User] = relationship(
-#         back_populates='trainer', init=False, lazy='selectin'
-#     )
-
-#     pokemon: Mapped[list['Pokemon']] = relationship(
-#         init=False, cascade='all, delete-orphan', lazy='selectin'
-#     )
-#     created_at: Mapped[datetime] = mapped_column(
-#         init=False, server_default=func.now()
-#     )
-#     updated_at: Mapped[datetime] = mapped_column(
-#         init=False, server_default=func.now(), onupdate=func.now()
-#     )
-
-
 @table_registry.mapped_as_dataclass
 class Pokemon:
     __tablename__ = 'pokemon'
@@ -81,6 +59,39 @@ class PokemonType:
     pokemon: Mapped[list['Pokemon']] = relationship(
         back_populates='type', init=False
     )
+    created_at: Mapped[datetime] = mapped_column(
+        init=False, server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        init=False, server_default=func.now(), onupdate=func.now()
+    )
+
+
+@table_registry.mapped_as_dataclass
+class Team:
+    __tablename__ = 'teams'
+
+    id: Mapped[int] = mapped_column(
+        init=False, primary_key=True, autoincrement=True
+    )
+    name: Mapped[str]
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    created_at: Mapped[datetime] = mapped_column(
+        init=False, server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        init=False, server_default=func.now(), onupdate=func.now() 
+    )
+
+@table_registry.mapped_as_dataclass
+class PokemonTeam:
+    __tablename__ = 'pokemon_teams'
+
+    id: Mapped[int] = mapped_column(
+        init=False, primary_key=True, autoincrement=True
+    )
+    team_id: Mapped[int] = mapped_column(ForeignKey('teams.id'))
+    pokemon_id: Mapped[int] = mapped_column(ForeignKey('pokemon.id'))
     created_at: Mapped[datetime] = mapped_column(
         init=False, server_default=func.now()
     )
@@ -140,35 +151,6 @@ class PokemonType:
 #     id: Mapped[int] = mapped_column(init=False, primary_key=True)
 #     pokemon_id: Mapped[int] = mapped_column(ForeignKey('pokemon.id'))
 #     ability_id: Mapped[int] = mapped_column(ForeignKey('abilities.id'))
-#     created_at: Mapped[datetime] = mapped_column(
-#         init=False, server_default=func.now()
-#     )
-#     updated_at: Mapped[datetime] = mapped_column(
-#         init=False, server_default=func.now(), onupdate=func.now()
-#     )
-
-
-# class Team:
-#     __tablename__ = 'teams'
-
-#     id: Mapped[int] = mapped_column(init=False, primary_key=True)
-#     name: Mapped[str]
-#     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-#     created_at: Mapped[datetime] = mapped_column(
-#         init=False, server_default=func.now()
-#     )
-#     updated_at: Mapped[datetime] = mapped_column(
-#         init=False, server_default=func.now(), onupdate=func.now()
-#     )
-
-
-# class PokemonTeam:
-#     __tablename__ = 'pokemon_teams'
-
-#     id: Mapped[int] = mapped_column(init=False, primary_key=True)
-#     team_id: Mapped[int] = mapped_column(ForeignKey('teams.id'))
-#     pokemon_id: Mapped[int] = mapped_column(ForeignKey('pokemon.id'))
-#     position: Mapped[int] = mapped_column()
 #     created_at: Mapped[datetime] = mapped_column(
 #         init=False, server_default=func.now()
 #     )
