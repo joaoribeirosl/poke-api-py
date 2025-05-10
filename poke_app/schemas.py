@@ -58,6 +58,28 @@ class PokemonUpdate(BaseModel):
     type: str | None = None
 
 
+class TeamBase(BaseModel):
+    name: str | None = None
+
+
+class TeamCreate(TeamBase):
+    pokemon_ids: list[int]
+
+
+class TeamUpdate(TeamBase):
+    pokemon_ids: list[int]
+
+
+class TeamResponse(TeamBase):
+    id: int
+    pokemon_ids: list[int]
+    model_config = ConfigDict(from_attributes=True)
+
+
+class TeamList(BaseModel):
+    team: list[TeamResponse]
+
+
 class TradeRequest(BaseModel):
     offered_pokemon_id: int
     requested_pokemon_id: int
