@@ -24,7 +24,9 @@ async def get_user_teams(session: Session, user: CurrentUser):
 
     for team in teams:
         result = await session.execute(
-            select(PokemonTeam.pokemon_id).where(PokemonTeam.team_id == team.id)
+            select(PokemonTeam.pokemon_id).where(
+                PokemonTeam.team_id == team.id
+            )
         )
         pokemon_ids = [row[0] for row in result.all()]
 

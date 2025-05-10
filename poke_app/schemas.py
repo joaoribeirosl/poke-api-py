@@ -86,7 +86,7 @@ class TeamResponse(TeamBase):
 
 
 class TeamList(BaseModel):
-    team: list[TeamResponse]
+    teams: list[TeamResponse]
 
 
 class TradeRequest(BaseModel):
