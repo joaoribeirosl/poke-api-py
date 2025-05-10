@@ -33,6 +33,7 @@ A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/).
 | POST   | `/auth/token`            | Login for access token     |
 | POST   | `/auth/refresh_token`    | Refresh access token       |
 
+---
 
 ### 👤 Users
 | Method | Route            | Description                        |
@@ -47,12 +48,27 @@ A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/).
 ### 🧬 Pokemon
 | Method | Route               | Description                         |
 |--------|---------------------|-------------------------------------|
-| POST   | `/pokemon/`                | Add a new Pokemon to a trainer |
-| GET    | `/pokemon/`                | List trainer's Pokemon       |
-| GET    | `/pokemon/all`             | List all Pokemon in database |
-| PATCH  | `/pokemon/{pokemon_id}`    | Patch a specific Pokemon     |
-| DELETE | `/pokemon/{pokemon_id}`    | Delete a specific Pokemon    |
-| POST   | `/pokemon/trade`           | trade pokemon from one trainer to another |
+| GET    | `/pokemon/`         | List user's Pokemon                 | 
+
+
+---
+
+### 🛡️ Teams
+| Method | Route               | Description                         |
+|--------|---------------------|-------------------------------------|
+| GET    | `/teams/`           | List user's Teams                   |
+| POST   | `/teams/`           | Register a new Team                 |
+
+
+---
+
+### 🗂️ Types
+| Method | Route               | Description                         |
+|--------|---------------------|-------------------------------------|
+| GET    | `/types/`           | List all Types in database          |
+
+
+
 
 ---
 
