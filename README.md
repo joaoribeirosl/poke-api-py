@@ -48,7 +48,7 @@ A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/).
 ### 🧬 Pokemon
 | Method | Route               | Description                         |
 |--------|---------------------|-------------------------------------|
-| GET    | `/pokemon/`         | List user's Pokemon                 | 
+| GET    | `/pokemon/`         | List all Pokemon in database        | 
 
 
 ---
