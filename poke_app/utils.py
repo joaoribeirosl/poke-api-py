@@ -5,6 +5,8 @@ import requests
 POKE_API_URL = 'https://pokeapi.co/api/v2/pokemon?limit=151&offset=0'
 POKE_API_TYPE_URL = 'https://pokeapi.co/api/v2/type'
 
+TEAM_LENGTH = 6
+
 TEST_POKEMON_NAMES = [
     'Pikachu',
     'Bulbasaur',
