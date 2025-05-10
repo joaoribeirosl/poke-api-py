@@ -1,6 +1,4 @@
-from pydantic import BaseModel, ConfigDict, EmailStr, field_validator
-
-from poke_app.utils import validate_type
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 class Message(BaseModel):
@@ -35,21 +33,24 @@ class Token(BaseModel):
 
 
 class PokemonSchema(BaseModel):
+    dex_no: int
     name: str
-    type: str
-    level: int = 1
+    type_id: int
     image_url: str | None = None
-
-    @field_validator('type')
-    @classmethod
-    def check_type(cls, type):
-        return validate_type(type)
 
 
 class PokemonResponse(PokemonSchema):
     id: int
-    trainer_id: int
     model_config = ConfigDict(from_attributes=True)
+
+
+class TypesResponse(BaseModel):
+    id: int
+    name: str
+
+
+class TypesList(BaseModel):
+    types: list[TypesResponse]
 
 
 class PokemonList(BaseModel):
@@ -64,6 +65,28 @@ class FilterPokemon(FilterPage):
 class PokemonUpdate(BaseModel):
     name: str | None = None
     type: str | None = None
+
+
+class TeamBase(BaseModel):
+    name: str | None = None
+
+
+class TeamCreate(TeamBase):
+    pokemon_ids: list[int]
+
+
+class TeamUpdate(TeamBase):
+    pokemon_ids: list[int]
+
+
+class TeamResponse(TeamBase):
+    id: int
+    pokemon_ids: list[int]
+    model_config = ConfigDict(from_attributes=True)
+
+
+class TeamList(BaseModel):
+    teams: list[TeamResponse]
 
 
 class TradeRequest(BaseModel):
