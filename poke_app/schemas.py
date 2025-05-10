@@ -44,6 +44,15 @@ class PokemonResponse(PokemonSchema):
     model_config = ConfigDict(from_attributes=True)
 
 
+class TypesResponse(BaseModel):
+    id: int
+    name: str
+
+
+class TypesList(BaseModel):
+    types: list[TypesResponse]
+
+
 class PokemonList(BaseModel):
     pokemon: list[PokemonResponse]
 
