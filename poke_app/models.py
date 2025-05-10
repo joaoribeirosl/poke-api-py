@@ -39,12 +39,6 @@ class Pokemon:
         back_populates='pokemon', init=False
     )
     image_url: Mapped[str] = mapped_column(nullable=True)
-    created_at: Mapped[datetime] = mapped_column(
-        init=False, server_default=func.now()
-    )
-    updated_at: Mapped[datetime] = mapped_column(
-        init=False, server_default=func.now(), onupdate=func.now()
-    )
 
 
 @table_registry.mapped_as_dataclass
@@ -59,12 +53,6 @@ class PokemonType:
     pokemon: Mapped[list['Pokemon']] = relationship(
         back_populates='type', init=False
     )
-    created_at: Mapped[datetime] = mapped_column(
-        init=False, server_default=func.now()
-    )
-    updated_at: Mapped[datetime] = mapped_column(
-        init=False, server_default=func.now(), onupdate=func.now()
-    )
 
 
 @table_registry.mapped_as_dataclass
@@ -76,12 +64,7 @@ class Team:
     )
     name: Mapped[str]
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-    created_at: Mapped[datetime] = mapped_column(
-        init=False, server_default=func.now()
-    )
-    updated_at: Mapped[datetime] = mapped_column(
-        init=False, server_default=func.now(), onupdate=func.now() 
-    )
+
 
 @table_registry.mapped_as_dataclass
 class PokemonTeam:
@@ -92,12 +75,6 @@ class PokemonTeam:
     )
     team_id: Mapped[int] = mapped_column(ForeignKey('teams.id'))
     pokemon_id: Mapped[int] = mapped_column(ForeignKey('pokemon.id'))
-    created_at: Mapped[datetime] = mapped_column(
-        init=False, server_default=func.now()
-    )
-    updated_at: Mapped[datetime] = mapped_column(
-        init=False, server_default=func.now(), onupdate=func.now()
-    )
 
 
 # class Weakness:
