@@ -32,7 +32,7 @@ def test_get_token(client, user):
 
 def test_jwt_invalid_token(client):
     response = client.delete(
-        '/users/1', headers={'Authorization': 'Bearer token-invalido'}
+        '/users/1', headers={'Authorization': 'Bearer invalid-token'}
     )
 
     assert response.status_code == HTTPStatus.UNAUTHORIZED

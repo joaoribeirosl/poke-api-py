@@ -4,7 +4,7 @@ from http import HTTPStatus
 
 from fastapi import FastAPI
 
-from poke_app.routers import auth, pokemon, users
+from poke_app.routers import auth, pokemon, teams, types, users
 from poke_app.schemas import Message
 
 if sys.platform == 'win32':
@@ -15,6 +15,8 @@ app = FastAPI()
 app.include_router(users.router)
 app.include_router(auth.router)
 app.include_router(pokemon.router)
+app.include_router(teams.router)
+app.include_router(types.router)
 
 
 @app.get('/', status_code=HTTPStatus.OK, response_model=Message)

@@ -5,7 +5,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f7e98070888c40018976c58c13c2e0e9)](https://app.codacy.com/gh/joaoribeirosl/poke-api-py/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 ![Generic badge](https://img.shields.io/badge/version-v0.6.0-green.svg)
 
-A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/) simulating a Pokemon world!
+A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/).
 
 ---
 
@@ -21,6 +21,7 @@ A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/) simulating a P
 - 🐳 Docker: Containerization 
 - 📄 Alembic: Database migrations
 - ✨ SQLAlchemy 2.0: ORM for database interaction
+- ⚙️ Codacy: Embeds security checks and rules into my workflow
 
 ---
 
@@ -32,6 +33,7 @@ A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/) simulating a P
 | POST   | `/auth/token`            | Login for access token     |
 | POST   | `/auth/refresh_token`    | Refresh access token       |
 
+---
 
 ### 👤 Users
 | Method | Route            | Description                        |
@@ -46,10 +48,27 @@ A RESTful API built with [FastAPI](https://fastapi.tiangolo.com/) simulating a P
 ### 🧬 Pokemon
 | Method | Route               | Description                         |
 |--------|---------------------|-------------------------------------|
-| POST   | `/pokemon/`                | Add a new Pokemon to user    |
-| GET    | `/pokemon/`                | List user's Pokemon          |
-| PATCH  | `/pokemon/{pokemon_id}`    | Patch a specific Pokemon     |
-| DELETE | `/pokemon/{pokemon_id}`    | Delete a specific Pokemon    |
+| GET    | `/pokemon/`         | List all Pokemon in database        | 
+
+
+---
+
+### 🛡️ Teams
+| Method | Route               | Description                         |
+|--------|---------------------|-------------------------------------|
+| GET    | `/teams/`           | List user's Teams                   |
+| POST   | `/teams/`           | Register a new Team                 |
+
+
+---
+
+### 🗂️ Types
+| Method | Route               | Description                         |
+|--------|---------------------|-------------------------------------|
+| GET    | `/types/`           | List all Types in database          |
+
+
+
 
 ---
 
@@ -96,14 +115,16 @@ If you want to create a new migration follow these steps:
 ```bash
 docker exec -it <container-app> bash
 
-alembic revision -m "migration-name"
+alembic revision --autogenerate -m "name" # autogenerate is optional
 
 alembic upgrade head
 ```
 
 > [!WARNING]
-In case you have something like this: `alembic.util.CommandError: Can't locate revision identified by '31b8ab83c7d'` you can follow these steps:
+In case you delete a migration and have something like this: `alembic.util.CommandError: Can't locate revision identified by '31b8ab83c7d'` you can follow these steps:
 
+> [!WARNING]
+Remember to delete the migration in `__pycache__` too!
 ```bash
 docker exec -it <container-app> bash
 
@@ -111,7 +132,7 @@ alembic stamp <previous_revision_id> # e.g. 6790cb4674f7
 ```
 
 ```bash
-docker compose down -v # Clean volumes
+docker compose down -v # Clear volumes
 
 docker compose up -d
 
@@ -128,7 +149,7 @@ task test
 
 
 Tests are located in the tests/ directory and use pytest.
-Includes coverage for users, pokemon, and authentication flows.
+Includes coverage for users, pokemon, authentication flows and more.
 
 ## 📬 API Documentation
 
